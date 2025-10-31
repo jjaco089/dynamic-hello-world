@@ -12,7 +12,7 @@ async function setDynamicGreeting() {
     // Example: 'https://my-azure-api.azurewebsites.net/api/location'
     
     // We will use the local URL for now so you can test it immediately:
-    const apiUrl = 'http://localhost:3000/api/location'; 
+    const apiUrl = 'https://dynhw.azurewebsites.net/api/location'; 
 
     try {
         // 1. Fetch data from our self-hosted API

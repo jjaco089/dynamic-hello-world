@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 // For security, you should replace '*' with the specific URL of your GitHub Pages site 
 // once you know it (e.g., 'https://yourusername.github.io').
 app.use(cors({
-    origin: '*' // Allowing all origins for easy local testing. 
+    origin: 'https://jjaco089.github.io/dynamic-hello-world' // Allowing all origins for easy local testing. 
 }));
 
 
