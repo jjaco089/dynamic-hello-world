@@ -6,6 +6,10 @@ const app = express();
 // Use the port provided by the hosting environment (Azure) or default to 3000 locally
 const PORT = process.env.PORT || 3000; 
 
+// Tell Express to trust the first proxy. This allows Express to read 
+// the true client IP from the 'X-Forwarded-For' header and set it as req.ip.
+app.set('trust proxy', 1); // '1' means trust the first hop (the Azure proxy)
+
 // --- CORS Configuration ---
 // Since the front-end will be hosted on GitHub Pages (a different domain), 
 // we must configure CORS to allow those requests.
