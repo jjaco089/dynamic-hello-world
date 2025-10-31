@@ -1,0 +1,23 @@
+{
+  "name": "dynamic-hello-world-server",
+  "version": "1.0.0",
+  "description": "A Node.js API to provide a country-based greeting using server-side geolocation.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "geolocation",
+    "express",
+    "node",
+    "azure"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "geoip-lite": "^1.4.10"
+  }
+}
