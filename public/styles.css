@@ -1,0 +1,19 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8; /* Soft blue-gray background */
+    color: #1e3a8a; /* Deep blue text color */
+}
+
+#greeting {
+    /* Huge, bold, responsive font */
+    font-size: 8vw; /* 8% of the viewport width */
+    font-weight: 800;
+    text-align: center;
+    padding: 20px;
+    letter-spacing: -2px;
+}

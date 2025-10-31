@@ -25,14 +25,13 @@ app.use(express.static('public'));
 // --- Geolocation API Endpoint ---
 app.get('/api/location', (req, res) => {
     // 1. Extract the IP Address
-    // When running locally, this is usually '::1' or '127.0.0.1'.
-    // When deployed on Azure, the real user IP is often found in the 'x-forwarded-for' header.
-    // We use the req.ip property provided by Express, which is often smart enough 
-    // to check the necessary headers in a production environment.
+    // In Azure App Service, the real user IP is often extracted from headers 
+    // and correctly set as req.ip by Express/middleware.
     const ip = req.ip; 
     
     // 2. Perform the Geolocation Lookup
-    const geo = geoip.lookup(ip);
+    // Clean up the IP format for geoip-lite lookup
+    const geo = geoip.lookup(ip.replace('::ffff:', '')); 
 
     let countryName = 'World'; // Default fallback
     let countryCode = 'N/A';
@@ -40,17 +39,9 @@ app.get('/api/location', (req, res) => {
     if (geo && geo.country) {
         countryCode = geo.country;
         
-        // Use the browser's built-in Internationalization API equivalent 
-        // to convert the code (e.g., 'US') to a name (e.g., 'United States').
-        // Since the server doesn't have the full browser API, 
-        // we'll use a simple conversion or just return the code.
-        // For simplicity and reliability on the server, we'll use a lookup or just the code for now.
-        // *** IMPORTANT: The geoip-lite library sometimes provides a country name, but we'll stick to a robust format.
-        
+        // Convert the code (e.g., 'US') to a readable name (e.g., 'United States')
         try {
-            // A simple method to get the full name from the code
             const name = new Intl.DisplayNames(['en'], { type: 'region' }).of(countryCode);
-            // Replace the default name
             countryName = name || countryName; 
         } catch (e) {
             // Fallback for environments that lack Intl support
@@ -63,7 +54,7 @@ app.get('/api/location', (req, res) => {
         greeting: `Hello ${countryName}!`,
         country: countryName,
         code: countryCode,
-        ip: ip
+        ip: ip 
     });
 });
 
