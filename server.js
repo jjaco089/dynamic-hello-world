@@ -28,14 +28,22 @@ app.use(express.static('public'));
 
 // --- Geolocation API Endpoint ---
 app.get('/api/location', (req, res) => {
-    // 1. Extract the IP Address
-    // In Azure App Service, the real user IP is often extracted from headers 
-    // and correctly set as req.ip by Express/middleware.
-    const ip = req.ip; 
+    // 1. Extract and Clean the IP Address
+    let rawIp = req.ip; 
+    
+    // First, strip the '::ffff:' prefix (for IPv6 to IPv4 mapping)
+    let cleanIp = rawIp.replace('::ffff:', '');
+    
+    // Second, strip the port number and anything after the first colon ':'
+    // This is the CRITICAL change to fix the "IP:PORT" format issue
+    const ipParts = cleanIp.split(':');
+    cleanIp = ipParts[0]; // Take only the IP part before the colon
+
+    // The IP address we will log and look up
+    const finalIp = cleanIp; 
     
     // 2. Perform the Geolocation Lookup
-    // Clean up the IP format for geoip-lite lookup
-    const geo = geoip.lookup(ip.replace('::ffff:', '')); 
+    const geo = geoip.lookup(finalIp); 
 
     let countryName = 'World'; // Default fallback
     let countryCode = 'N/A';
@@ -58,7 +66,8 @@ app.get('/api/location', (req, res) => {
         greeting: `Hello ${countryName}!`,
         country: countryName,
         code: countryCode,
-        ip: ip 
+        ip: rawIp, // Log the raw IP for future debugging
+        lookedUpIp: finalIp // Log the cleaned IP that was used for lookup
     });
 });
 
